@@ -11,6 +11,16 @@ public class Places implements Serializable {
     private String lang;
     private String lng;
     private String distance;
+    private float azimuth;
+    public static boolean isNear=false;
+
+    public static boolean isNear() {
+        return isNear;
+    }
+
+    public static void setNear(boolean near) {
+        isNear = near;
+    }
 
     public Places() {
     }
@@ -23,6 +33,14 @@ public class Places implements Serializable {
         this.lang = lang;
         this.lng = lng;
         this.distance = distance;
+    }
+
+    public float getAzimuth() {
+        return azimuth;
+    }
+
+    public void setAzimuth(float azimuth) {
+        this.azimuth = azimuth;
     }
 
     public String getId() {

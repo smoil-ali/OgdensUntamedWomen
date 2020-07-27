@@ -1,4 +1,7 @@
-ID,Name,Description,Image,lat,long,activeDistance
-1,Monroe Park,A nice park.,img1.jpg,31.498462, 73.252291,20
-2,Lester Park,A smaller park.,img2.jpg,31.498462, 73.252291,20
-3,Refuge Church,A church.,img3.jpg,31.498462, 73.252291,20
+ID|Name|Description|Image|lat|long|activeDistance
+1|Belle London|Belle London ran sprawling empire of prostitution in the back alleys of notorious two-bit street. |BelleLondonUofU.png|31.4394606|73.0289843|20
+2|Berthana|"Bertha Eccles and Anna Dee lent their names and their efforts to create a space for the youth to gather and socialize. Since it's dedication, the building has housed skating rinks, restaurants, and more."|Berthana.png|41.2191726|-111.9653639|20
+3|Episcopal Church|This is one of the oldest churches in Ogden.|Episcopal.png|41.222551|-111.9624037|20
+4|Historic Union Station |The rebuild union station was dedicated in the 1920s. |OgdenStationHistoricphoto.jpeg|41.2207314|-111.9795535|20
+5|Sarah Anderson|Sarah Anderson's home was in the heart of the junction. She sued a county clerk for the right to vote.|SarahAndersonWSU.png|41.222551|-111.9624037|20
+6|Woolworths|"Woolworth's offered women independence and freedom, but it came with a strict social code. "|WoolworthUtahStatehistorical.png|41.222551|-111.9624037|20

@@ -5,8 +5,25 @@ public class PlaceContent {
     private String title;
     private String description;
     private String audio;
+    private boolean isPlay;
+    private boolean isPlaying;
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
 
     public PlaceContent() {
+    }
+
+    public PlaceContent(String location, String title, String description) {
+        this.location = location;
+        this.title = title;
+        this.description = description;
+
     }
 
     public PlaceContent(String location, String title, String description, String audio) {
@@ -14,6 +31,14 @@ public class PlaceContent {
         this.title = title;
         this.description = description;
         this.audio = audio;
+    }
+
+    public boolean isPlay() {
+        return isPlay;
+    }
+
+    public void setPlay(boolean play) {
+        isPlay = play;
     }
 
     public String getLocation() {

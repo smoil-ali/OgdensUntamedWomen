@@ -1,5 +1,7 @@
 package com.cgit.ogdensuntamedwomen.model;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,7 +27,7 @@ public class CSVFile {
             reader.readLine();
             while ((csvLine = reader.readLine()) != null) {
 
-                String[] row = csvLine.split(",");
+                String[] row = csvLine.split("\\|");
                 resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6]));
             }
 
@@ -51,9 +53,14 @@ public class CSVFile {
             reader.readLine();
             while ((csvLine = reader.readLine()) != null) {
 
-                String[] row = csvLine.split(",");
+                String[] row = csvLine.split("\\|");
                 if (id.equals(row[0])){
-                    resultList.add(new PlaceContent(row[0],row[1],row[2],row[3]));
+                    if (row.length==4){
+                        resultList.add(new PlaceContent(row[0],row[1],row[2],row[3]));
+                    }else {
+                        resultList.add(new PlaceContent(row[0],row[1],row[2]));
+                    }
+
                 }
 
             }

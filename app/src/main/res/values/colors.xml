@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#024071</color>
     <color name="colorAccent">#015291</color>
     <color name="newsFeedTopMenuColor">#F5F5F5</color>
+    <color name="disabled">#dddddd</color>
+    <color name="white">#ffffff</color>
 </resources>

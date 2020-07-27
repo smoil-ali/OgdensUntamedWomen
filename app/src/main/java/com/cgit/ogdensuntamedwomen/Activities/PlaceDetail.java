@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.TargetApi;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -43,8 +44,8 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     MediaPlayer mediaPlayer;
     public static int lastIndex=-1;
     womenViewModel viewModel;
-    public static int listPosition =0;
-    public static int seekBarPosition=0;
+    public static int listPos =-1;
+    public static int seekBarPosition=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,16 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
-        setUpRecyclerView();
+
+        if (savedInstanceState != null){
+            listPos = savedInstanceState.getInt("listPos");
+            seekBarPosition = savedInstanceState.getInt("seekBarPos");
+            Log.i(TAG,listPos+" in saved");
+            setUpRecyclerView();
+        }else {
+            Log.i(TAG,listPos+" in saved else");
+            setUpRecyclerView();
+        }
 
         viewModel = new ViewModelProvider(this,new womenFactory(this,places)).get(womenViewModel.class);
         viewModel.getMutableLiveData().observe(this, new Observer<ArrayList<PlaceContent>>() {
@@ -107,11 +117,37 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+
+    @Override
+    public void onClicked(int listPosition) {
+        Log.i(TAG, String.valueOf(listPosition)+"pos");
+        listPos = listPosition;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG,"stopped");
+        seekBarPosition=adapter.getCurrentPosition();
         adapter.onstop();
     }
 
     @Override
-    public void onClicked(int listPosition, int seekBarPosition) {
-
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG,"destroy");
+        listPos =-1;
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG,"in out state");
+        Log.i(TAG, String.valueOf(seekBarPosition) + "seek bar position");
+        outState.putInt("listPos",listPos);
+        outState.putInt("seekBarPos",seekBarPosition);
+    }
+
 }

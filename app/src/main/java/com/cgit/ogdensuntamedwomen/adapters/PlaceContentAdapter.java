@@ -32,13 +32,14 @@ import java.util.zip.Inflater;
 import static android.content.ContentValues.TAG;
 import static com.cgit.ogdensuntamedwomen.Activities.PlaceDetail.lastIndex;
 
-public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapter.ViewHolder> {
+public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapter.ViewHolder>   {
     Context context;
     ArrayList<PlaceContent> placeContentArrayList;
     MediaPlayer mediaPlayer=null;
     Runnable runnable;
     Handler handler;
     CgitListener cgitListener;
+    int ResumePosition = -1;
 
 
     public PlaceContentAdapter(Context context, ArrayList<PlaceContent> placeContentArrayList) {
@@ -62,39 +63,25 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
         PlaceContent placeContent=placeContentArrayList.get(position);
         holder.title.setText(placeContent.getTitle());
         holder.description.setText(placeContent.getDescription());
-        Log.i(TAG,PlaceDetail.listPos+" in adapter");
-
-        if (PlaceDetail.listPos == position){
-            Log.i(TAG,"in position "+position);
+        if (PlaceDetail.listPos == position && placeContent.isPlaying()){
+            resume(position,placeContent,holder);
+        }else if (PlaceDetail.listPos == position){
             String [] audioname=placeContent.getAudio().split("\\.");
-            Log.i("audioname","check "+audioname[0]);
             String uriPath = "android.resource://" + context.getPackageName() + "/raw/" +audioname[0];
             Uri uri = Uri.parse(uriPath);
             mediaPlayer=MediaPlayer.create(context,uri);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             int fileduration=mediaPlayer.getDuration();
             holder.audiofile.setMax(fileduration);
-            Log.i(TAG,PlaceDetail.seekBarPosition+"");
             holder.audiofile.setProgress(PlaceDetail.seekBarPosition);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.seekTo(PlaceDetail.seekBarPosition);
-                    mp.start();
-                    cyclerplay(holder);
-                    holder.pause.setVisibility(View.VISIBLE);
-                    holder.start.setVisibility(View.GONE);
-
-                }
-            });
-            cyclerplay(holder);
+            mediaPlayer.seekTo(PlaceDetail.seekBarPosition);
         }
-
 
         if (placeContent.getAudio()==null){
             holder.start.setVisibility(View.GONE);
             holder.audiofile.setVisibility(View.GONE);
         }else{
+
             if (placeContent.isPlaying()){
                 Log.i("adapter","pause"+position);
                 holder.pause.setVisibility(View.VISIBLE);
@@ -104,16 +91,15 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
                 holder.start.setVisibility(View.VISIBLE);
                 holder.pause.setVisibility(View.GONE);
             }
-
             holder.pause.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    placeContentArrayList.get(position).setPlaying(false);
-
                     if (mediaPlayer!=null){
                         if (mediaPlayer.isPlaying()){
+                            ResumePosition = mediaPlayer.getCurrentPosition();
                             holder.start.setVisibility(View.VISIBLE);
                             holder.pause.setVisibility(View.GONE);
+                            placeContentArrayList.get(position).setPlaying(false);
                             mediaPlayer.pause();
                         }
 
@@ -126,87 +112,78 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
                 @Override
                 public void onClick(View v) {
                     Log.i("adapter",""+lastIndex);
-                    if (lastIndex != -1){
+                    int temp = lastIndex;
+                    lastIndex=position;
+                    if (lastIndex != -1 && temp!=position){
                         placeContentArrayList.get(lastIndex).setPlaying(false);
                         notifyItemChanged(lastIndex);
                     }
-                    cgitListener.onClicked(position);
-                    lastIndex=position;
                     placeContentArrayList.get(position).setPlaying(true);
-                    String [] audioname=placeContent.getAudio().split("\\.");
-                    Log.i("audioname","check "+audioname[0]);
-                    String uriPath = "android.resource://" + context.getPackageName() + "/raw/" +audioname[0];
-                    Uri uri = Uri.parse(uriPath);
-                    if (mediaPlayer!=null){
-                        if (mediaPlayer.isPlaying()){
-                            mediaPlayer.stop();
-                            mediaPlayer.release();
-                            holder.pause.setVisibility(View.GONE);
-                            holder.start.setVisibility(View.VISIBLE);
-
+                    if (mediaPlayer!=null) {
+                        if (ResumePosition != -1) {
+                            mediaPlayer.seekTo(ResumePosition);
+                            mediaPlayer.start();
+                            holder.pause.setVisibility(View.VISIBLE);
+                            holder.start.setVisibility(View.GONE);
+                            cyclerplay(holder);
+                        } else {
+                            resume(position, placeContent, holder);
                         }
-                        Log.i("check audio play","audio is playing");
-                    }
-
-                    mediaPlayer=MediaPlayer.create(context,uri);
-
-                    try {
-                        /* mediaPlayer.stop();*/
-
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        int fileduration=mediaPlayer.getDuration();
-                        holder.audiofile.setMax(fileduration);
-
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.seekTo(0);
-                                mp.start();
+                    }else {
+                        if (PlaceDetail.listPos == -1) {
+                            cgitListener.onClicked(position);
+                            String[] audioName = placeContent.getAudio().split("\\.");
+                            String uriPath = "android.resource://" + context.getPackageName() + "/raw/" + audioName[0];
+                            Uri uri = Uri.parse(uriPath);
+                            mediaPlayer = MediaPlayer.create(context, uri);
+                            try {
+                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                                int fileDuration = mediaPlayer.getDuration();
+                                Log.i(TAG, "in adater else 1 " + fileDuration);
+                                holder.audiofile.setMax(fileDuration);
+                                mediaPlayer.start();
                                 cyclerplay(holder);
                                 holder.pause.setVisibility(View.VISIBLE);
                                 holder.start.setVisibility(View.GONE);
+                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mediaPlayer1) {
+                                        holder.start.setVisibility(View.VISIBLE);
+                                        holder.pause.setVisibility(View.GONE);
+                                        holder.audiofile.setProgress(0);
+                                        mediaPlayer.stop();
+                                        mediaPlayer.reset();
+                                        mediaPlayer.release();
+                                        mediaPlayer = null;
+                                    }
+                                });
 
+                            } catch (Exception e) {
+                                Log.i("media file", e.getMessage());
+                                Toast.makeText(context, "Audio not Available", Toast.LENGTH_LONG).show();
                             }
-                        });
-
-                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                holder.pause.setVisibility(View.GONE);
-                                holder.start.setVisibility(View.VISIBLE);
-                                PlaceDetail.listPos = -1;
-                                PlaceDetail.seekBarPosition = -1;
-                                placeContentArrayList.get(position).setPlaying(false);
-                            }
-                        });
-                    }catch (Exception e){
-
-                        Log.i("media file",e.getMessage());
-                        Toast.makeText(context,"Audio not Available",Toast.LENGTH_LONG).show();
+                        }
                     }
 
+                }
+            });
 
+            holder.audiofile.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    if (b){
+                        mediaPlayer.seekTo(i);
+                    }
+                }
 
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
 
-                    holder.audiofile.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            if (fromUser){
-                                Log.i("seekbar",progress+"");
-                                mediaPlayer.seekTo(progress);
-                            }
-                        }
+                }
 
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
 
-                        }
-
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-
-                        }
-                    });
                 }
             });
         }
@@ -218,7 +195,8 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
         handler=new Handler();
         if (mediaPlayer!=null){
             if (mediaPlayer.isPlaying()){
-            holder.audiofile.setProgress(mediaPlayer.getCurrentPosition());
+                Log.i(TAG,"here");
+                 holder.audiofile.setProgress(mediaPlayer.getCurrentPosition());
                 runnable=new Runnable(){
                     @Override
                     public void run() {
@@ -227,12 +205,53 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
                 };
                 handler.postDelayed(runnable,100);
             }
+        }else {
+            Log.i(TAG,"killed");
         }
+    }
 
+    public void resume(int position,PlaceContent placeContent,ViewHolder holder){
+        Log.i(TAG,"in position "+position);
+        String [] audioname=placeContent.getAudio().split("\\.");
+        String uriPath = "android.resource://" + context.getPackageName() + "/raw/" +audioname[0];
+        Uri uri = Uri.parse(uriPath);
+        if (mediaPlayer!=null){
+            mediaPlayer.reset();
+            mediaPlayer.release();
+        }
+        mediaPlayer=MediaPlayer.create(context,uri);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        int fileduration=mediaPlayer.getDuration();
+        holder.audiofile.setMax(fileduration);
+        Log.i(TAG,PlaceDetail.seekBarPosition+"");
+        holder.audiofile.setProgress(PlaceDetail.seekBarPosition);
+        mediaPlayer.seekTo(PlaceDetail.seekBarPosition);
+        mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer1) {
+                holder.start.setVisibility(View.VISIBLE);
+                holder.pause.setVisibility(View.GONE);
+                holder.audiofile.setProgress(0);
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                mediaPlayer = null;
+                PlaceDetail.listPos = -1;
+                PlaceDetail.seekBarPosition = -1;
+            }
+        });
+        holder.pause.setVisibility(View.VISIBLE);
+        holder.start.setVisibility(View.GONE);
+        cyclerplay(holder);
     }
 
     public int getCurrentPosition(){
-        return mediaPlayer.getCurrentPosition();
+        if (mediaPlayer != null){
+            Log.i(TAG,"in adapter else 2"+mediaPlayer.getCurrentPosition());
+            return mediaPlayer.getCurrentPosition();
+        }
+        return 0;
     }
 
 
@@ -240,6 +259,9 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
     public int getItemCount() {
         return placeContentArrayList.size();
     }
+
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title,description,audioduration;
@@ -261,7 +283,6 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
 
     public void onstop(){
         if (mediaPlayer!=null){
-            mediaPlayer.seekTo(0);
             mediaPlayer.stop();
             mediaPlayer.reset();
             mediaPlayer.release();
@@ -272,5 +293,4 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
 
 
     }
-
 }

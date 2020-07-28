@@ -117,6 +117,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.i(TAG,"back pressed");
     }
 
 
@@ -126,26 +127,27 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         listPos = listPosition;
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
         Log.i(TAG,"stopped");
-        seekBarPosition=adapter.getCurrentPosition();
         adapter.onstop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG,"destroy");
-        listPos =-1;
+        listPos = -1;
+        seekBarPosition = -1;
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        seekBarPosition=adapter.getCurrentPosition();
         Log.i(TAG,"in out state");
-        Log.i(TAG, String.valueOf(seekBarPosition) + "seek bar position");
+        Log.i(TAG, seekBarPosition + "seek bar position");
         outState.putInt("listPos",listPos);
         outState.putInt("seekBarPos",seekBarPosition);
     }

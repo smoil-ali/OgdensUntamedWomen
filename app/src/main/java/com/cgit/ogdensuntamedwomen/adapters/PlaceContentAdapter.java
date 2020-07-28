@@ -172,6 +172,7 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     if (b){
+                        ResumePosition = i;
                         mediaPlayer.seekTo(i);
                     }
                 }
@@ -289,8 +290,5 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
             mediaPlayer=null;
             handler=null;
         }
-
-
-
     }
 }

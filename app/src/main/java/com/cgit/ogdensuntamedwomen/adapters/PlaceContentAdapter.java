@@ -81,13 +81,12 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
                 public void onPrepared(MediaPlayer mp) {
                     mp.seekTo(PlaceDetail.seekBarPosition);
                     mp.start();
-                    cyclerplay(holder);
+                    cyclerplay(holder,mp);
                     holder.pause.setVisibility(View.VISIBLE);
                     holder.start.setVisibility(View.GONE);
 
                 }
             });
-            cyclerplay(holder);
         }
 
 
@@ -160,9 +159,8 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
                         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                             @Override
                             public void onPrepared(MediaPlayer mp) {
-                                mp.seekTo(0);
                                 mp.start();
-                                cyclerplay(holder);
+                                cyclerplay(holder,mp);
                                 holder.pause.setVisibility(View.VISIBLE);
                                 holder.start.setVisibility(View.GONE);
 
@@ -214,15 +212,15 @@ public class PlaceContentAdapter extends RecyclerView.Adapter<PlaceContentAdapte
 
     }
 
-    public void cyclerplay(ViewHolder holder){
+    public void cyclerplay(ViewHolder holder,MediaPlayer mp){
         handler=new Handler();
-        if (mediaPlayer!=null){
-            if (mediaPlayer.isPlaying()){
-            holder.audiofile.setProgress(mediaPlayer.getCurrentPosition());
+        if (mp!=null){
+            if (mp.isPlaying()){
+            holder.audiofile.setProgress(mp.getCurrentPosition());
                 runnable=new Runnable(){
                     @Override
                     public void run() {
-                        cyclerplay(holder);
+                        cyclerplay(holder,mp);
                     }
                 };
                 handler.postDelayed(runnable,100);

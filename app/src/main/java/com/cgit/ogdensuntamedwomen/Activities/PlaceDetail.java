@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.TargetApi;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -117,6 +118,10 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.i(TAG,"back pressed");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ){
+            adapter.onstop();
+        }
     }
 
 
@@ -126,28 +131,46 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         listPos = listPosition;
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
         Log.i(TAG,"stopped");
-        seekBarPosition=adapter.getCurrentPosition();
-        adapter.onstop();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ){
+            seekBarPosition=adapter.getCurrentPosition();
+        }else {
+            adapter.onstop();
+        }
+
+
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Log.i(TAG,"destroy");
-        listPos =-1;
+        super.onDestroy();
+        listPos = -1;
+        seekBarPosition = -1;
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(TAG,"in out state");
-        Log.i(TAG, String.valueOf(seekBarPosition) + "seek bar position");
-        outState.putInt("listPos",listPos);
-        outState.putInt("seekBarPos",seekBarPosition);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            Log.i(TAG,"in out state");
+            Log.i(TAG, seekBarPosition + "seek bar position");
+            outState.putInt("listPos",listPos);
+            outState.putInt("seekBarPos",seekBarPosition);
+            adapter.onstop();
+        }else {
+            seekBarPosition=adapter.getCurrentPosition();
+            Log.i(TAG,"in out state");
+            Log.i(TAG, seekBarPosition + "seek bar position");
+            outState.putInt("listPos",listPos);
+            outState.putInt("seekBarPos",seekBarPosition);
+        }
+
+
     }
 
 }

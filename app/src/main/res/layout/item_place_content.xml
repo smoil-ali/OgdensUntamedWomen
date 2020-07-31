@@ -41,7 +41,6 @@
                 />
 
             <androidx.appcompat.widget.AppCompatSeekBar
-
                 android:id="@+id/audiofile"
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="wrap_content"
@@ -49,7 +48,6 @@
                 app:layout_constraintStart_toEndOf="@+id/control"
                 app:layout_constraintBottom_toBottomOf="@id/control"
                 android:layout_marginTop="16dp"
-
                 />
 
             <TextView

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -28,6 +29,9 @@ import com.cgit.ogdensuntamedwomen.model.PlaceContent;
 import com.cgit.ogdensuntamedwomen.model.Places;
 import com.cgit.ogdensuntamedwomen.womenFactory;
 import com.cgit.ogdensuntamedwomen.womenViewModel;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +51,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     womenViewModel viewModel;
     public static int listPos =-1;
     public static int seekBarPosition=-1;
+    YouTubePlayerView video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         placeImage=findViewById(R.id.placeImage);
         title=findViewById(R.id.placeTitle);
         description=findViewById(R.id.description);
+        video=findViewById(R.id.video);
         recyclerView=findViewById(R.id.mRecyclerView);
         recyclerView.setNestedScrollingEnabled(false);
         places= (Places) getIntent().getExtras().getSerializable("placedetail");
@@ -94,8 +100,19 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         placeImage.setImageResource(id);
         title.setText(places.getTitle());
         description.setText(places.getDescription());
+        setVedioPlayer();
         mediaPlayer=new MediaPlayer();
 
+    }
+
+    private void setVedioPlayer(){
+        getLifecycle().addObserver(video);
+        video.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(YouTubePlayer youTubePlayer) {
+                youTubePlayer.loadVideo(places.getVideoId(),0);
+            }
+        });
     }
 
     //Get list of strings from CSV ready to use
@@ -119,6 +136,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     public void onBackPressed() {
         super.onBackPressed();
         Log.i(TAG,"back pressed");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ){
             adapter.onstop();
         }

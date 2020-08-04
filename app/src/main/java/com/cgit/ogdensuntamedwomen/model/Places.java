@@ -11,6 +11,7 @@ public class Places implements Serializable {
     private String lang;
     private String lng;
     private String distance;
+    private String videoId;
     private float azimuth;
     public static boolean isNear=false;
 
@@ -25,7 +26,7 @@ public class Places implements Serializable {
     public Places() {
     }
 
-    public Places(String id, String title, String description, String image, String lang, String lng, String distance) {
+    public Places(String id, String title, String description, String image, String lang, String lng, String distance ,String videoId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -33,6 +34,7 @@ public class Places implements Serializable {
         this.lang = lang;
         this.lng = lng;
         this.distance = distance;
+        this.videoId=videoId;
     }
 
     public float getAzimuth() {
@@ -97,5 +99,13 @@ public class Places implements Serializable {
 
     public void setDistance(String distance) {
         this.distance = distance;
+    }
+
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
     }
 }

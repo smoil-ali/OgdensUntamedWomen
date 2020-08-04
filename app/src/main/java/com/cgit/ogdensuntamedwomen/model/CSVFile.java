@@ -28,7 +28,7 @@ public class CSVFile {
             while ((csvLine = reader.readLine()) != null) {
 
                 String[] row = csvLine.split("\\|");
-                resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6]));
+                resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]));
             }
 
         }

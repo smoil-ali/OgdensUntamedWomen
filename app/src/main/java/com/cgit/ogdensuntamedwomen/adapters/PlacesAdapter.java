@@ -1,5 +1,6 @@
 package com.cgit.ogdensuntamedwomen.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -106,31 +107,42 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             }
         }else{
             Places places=placesArrayList.get(position);
+            String[] imageName=places.getImage().split("\\.");
+            Log.i("name",imageName[0]);
+            int id=context.getResources().getIdentifier(imageName[0].toLowerCase(), "drawable", context.getPackageName());
+            holder.thumbnail.setImageResource(id);
             holder.title.setText(places.getTitle());
             holder.description.setText(places.getDescription());
             holder.card.setEnabled(true);
             holder.cardRelativeLayout.setBackground(context.getDrawable(R.drawable.cardbackground));
             holder.cardRelativeLayout.setBackgroundColor(ContextCompat.getColor(context,R.color.disabled));
             holder.card.setElevation(0);
-            if (places.isNear()){
-                Log.i("is near",places.getDistance()+String.valueOf(places.isNear()));
-                if ((int)Double.parseDouble(places.getDistance())<MainActivity.nearestDestance){
-                    Log.i("is near","greater 200");
-
-                    holder.card.setEnabled(true);
-                    holder.card.setElevation(6);
-                    holder.cardRelativeLayout.setBackground(context.getDrawable(R.drawable.cardbackground));
-
-
-                }
+            if (places.isNear() || MainActivity.setEnabled){
+                holder.cardRelativeLayout.setBackground(context.getDrawable(R.drawable.cardbackground));
             }
 
             holder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(context, PlaceDetail.class);
-                    intent.putExtra("placedetail",places);
-                    context.startActivity(intent);
+                    if (places.isNear()||MainActivity.setEnabled){
+                        Log.i("is near",places.getDistance()+String.valueOf(places.isNear()));
+                        if ((int)Double.parseDouble(places.getDistance())<MainActivity.nearestDestance ||MainActivity.setEnabled){
+                            Log.i("is near","greater 200");
+                            Intent intent=new Intent(context, PlaceDetail.class);
+                            intent.putExtra("placedetail",places);
+                            context.startActivity(intent);
+                            holder.card.setElevation(6);
+
+                        }
+                    }else{
+                        new AlertDialog.Builder(context)
+                                .setTitle("Location is Locked")
+                                .setMessage("You must be within "+MainActivity.nearestDestance+" ml to unlock this location")
+                                .setPositiveButton("OK",(dialog, which) -> dialog.dismiss())
+                                .show();
+
+                    }
+
                 }
             });
 
@@ -158,7 +170,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         CardView card;
         TextView title,description,distance;
         RelativeLayout cardRelativeLayout;
-        ImageView arrowView;
+        ImageView arrowView,thumbnail;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -169,6 +181,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             distance=itemView.findViewById(R.id.distance);
             cardRelativeLayout=itemView.findViewById(R.id.cardRelativeLayout);
             arrowView=itemView.findViewById(R.id.arrowView);
+            thumbnail=itemView.findViewById(R.id.thumbnail);
+
         }
     }
 }

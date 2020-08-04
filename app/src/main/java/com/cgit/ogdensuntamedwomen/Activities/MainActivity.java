@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,12 +19,19 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +42,7 @@ import com.cgit.ogdensuntamedwomen.Utility.Utils;
 import com.cgit.ogdensuntamedwomen.adapters.PlacesAdapter;
 import com.cgit.ogdensuntamedwomen.model.CSVFile;
 import com.cgit.ogdensuntamedwomen.model.Places;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +54,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.cgit.ogdensuntamedwomen.Utility.Constants.PERMISSION_READ_EXTERNAL_STORAGE;
 import static com.cgit.ogdensuntamedwomen.Utility.Constants.PERMISSION_WRITE_EXTERNAL_STORAGE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView,navRecycler;
     ArrayList<Places> arrayList;
@@ -56,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_LOCATION_PERMISSION=101;
     private boolean mLocationPermissionGranted = false;
     public static int nearestDestance;
-
+    ImageButton menu;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    public static boolean setEnabled=true;
 
     public static float[] locationInDegree;
 
@@ -64,12 +76,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        menu=findViewById(R.id.menu);
+        drawerLayout=findViewById(R.id.drawer);
+        navigationView=findViewById(R.id.navigation);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().findItem(R.id.menu_switch).setActionView(new Switch(this));
+        Switch swich=((Switch)navigationView.getMenu().findItem(R.id.menu_switch).getActionView());
+        swich.setChecked(true);
+        swich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isChecked()){
+                    setEnabled=true;
+                    Log.i("checkon",String.valueOf(setEnabled));
+                }
+                else{
+                    setEnabled=false;
+                    Log.i("checkon",String.valueOf(setEnabled));
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
 
         if(checkPermissions()){
             openScreen();
         }else {
             getPermissions();
         }
+
 
 
      /*   if(checkPermission()){
@@ -79,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
             getPermissions();
         }*/
     }
+
+
 
     //Get list of strings from CSV ready to use
     private void prepArray() {
@@ -249,4 +293,27 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_switch:
+               Switch switch_item= (Switch)item.getActionView();
+                switch_item.toggle();
+                if (switch_item.isChecked()){
+                    setEnabled=true;
+                    Log.i("checkon",String.valueOf(setEnabled));
+
+                }
+
+                else
+                   {
+
+                       setEnabled=false;
+                       Log.i("checkon",String.valueOf(setEnabled));
+                   }
+                adapter.notifyDataSetChanged();
+                return true;
+        }
+        return true;
+    }
 }

@@ -1,7 +1,13 @@
 Location,Title,Description,audiofile
-1|Belle London|Belle London ran sprawling empire of prostitution in the back alleys of notorious two-bit street. |bellelondon24thstgrantave.mp3
-2|Berthana|"Bertha Eccles and Anna Dee lent their names and their efforts to create a space for the youth to gather and socialize. Since it's dedication the building has housed skating rinks, restaurants, and more."|berthana24thstreetbetweengrantandkiesel.mp3
-3|Episcopal Church|This is one of the oldest churches in Ogden.|episcopalchurchgrantave24thstreet.mp3
-4|Historic Union Station |The rebuilt union station was dedicated in the 1920s. |unionstationintro25thstreetwallave.mp3
-5|Sarah Anderson|Sarah Anderson's home was in the heart of the junction. She sued a county clerk for the right to vote.|sarahanderson23rdstkieselave.mp3
-6|Woolworths|"Woolworth's offered women independence and freedom but it came with a strict social code. "|departmentstoreswashingtonave4thst.mp3
+1,Berthana," Welcome to this walking tour, highlighting the untamed women of Ogden's history. ",one_untamedintro.mp3,
+2,Jane Richards,"Jane Snyder Richards represented Utah's 25,000 women at the first ever assembly of the national council of women organized by Susan B. Anthony and Elizabeth Kady Stanton. ",two_untamedjanerichards.mp3
+3,Beatrice Dobbs,Beatrice Dobbs helped bring world class music and theater to the people of Ogden and helped found the Eccles Art Center.,nine_untamedepiscopalianchurch.mp3
+4,Mary Anne Coulter,Mary Anna Coulter was the only female member of her law class in the 1880s. ,four_untamedmaryannacolter.mp3
+5,Ruby Jewell Price,"Ruby Jewell Timms Price or- Grandma Ruby was an impressive woman. She was the First President of the Ogden branch of the NAACP, the first African-American school teacher in Utah, she was Appointed to serve on the Advisory Council for Black Affairs, and Before all this, she came to Utah with the intention of trying to become a fighter pilot after her brother's plane was lost in WWII (sadly that never came to fruition because she was a woman but as grandma ruby said she, didn’t know when to give up.",five_untamedrubyjewellprice.mp3
+6,Victorian Department Stores,"Woolworth's offered women independence and freedom, but it came with a strict social code. ",six_untameddepartmentstores.mp3
+7,Sarah Anderson,Sarah Anderson's home was in the heart of the junction. She sued a county clerk for the right to vote.,seven_untamedsarahanderson.mp3
+8,Grant Street,"Grant Street has changed a lot over the years, but some of the buildings that remain were home to garment factories, signmakers, and more. ",eightuntamedgrantstreet.mp3
+9,Episcopalian Church,Episcopal Church of the Good Shepherd is on of the oldest churches in Ogden. It was built in 1875 and added to the National Register of Historic Places in 1973.,nineuntamedepiscopalianchurch.mp3
+10,Belle London,Belle London ran sprawling empire of prostitution in the back alleys of notorious two-bit street. ,tenuntamedbellelondon.mp3
+11,The Berthana,"Bertha Eccles and Anna Dee lent their names and their efforts to create a space for the youth to gather and socialize. Since it's dedication, the building has housed skating rinks, restaurants, and more.",elevenuntamedberthana.mp3
+12,Conclusion,"Ogden has been home to some of the most fearless, compassionate, and enterprising women the west has ever seen. ",twelveuntamedconclusion.mp3

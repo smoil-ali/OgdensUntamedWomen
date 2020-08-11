@@ -78,6 +78,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
                 Log.i(TAG,"changed");
                 arrayList.clear();
                 arrayList.addAll(placeContents);
+                Log.i("size list",String.valueOf(arrayList.size()));
                 adapter.notifyDataSetChanged();
                 adapter.setCgitListener(PlaceDetail.this);
             }

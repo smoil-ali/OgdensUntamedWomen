@@ -41,12 +41,15 @@ import com.cgit.ogdensuntamedwomen.R;
 import com.cgit.ogdensuntamedwomen.Utility.Utils;
 import com.cgit.ogdensuntamedwomen.adapters.PlacesAdapter;
 import com.cgit.ogdensuntamedwomen.model.CSVFile;
+import com.cgit.ogdensuntamedwomen.model.CSVReader;
 import com.cgit.ogdensuntamedwomen.model.Places;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -133,11 +136,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (IOException e) {
             e.printStackTrace();
         }
+        CSVReader csvReader=new CSVReader(MainActivity.this);
+        arrayList=csvReader.read(inputStream);
+
+
+
+       /* InputStream inputStream = null;
+        try {
+            inputStream = getAssets().open("data.csv");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         CSVFile csvFile = new CSVFile(inputStream);
-        arrayList = csvFile.read();
-
-
-
+        arrayList = csvFile.read();*/
     }
 
 

@@ -172,12 +172,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         targetLocation=new Location("");
     }
 
-    private void getLocationPermission() {
-        /*
+/*    private void getLocationPermission() {
+        *//*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
-         */
+         *//*
         if (ContextCompat.checkSelfPermission(getApplicationContext(),
                 ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new String[]{ACCESS_FINE_LOCATION},
                     REQUEST_CODE_LOCATION_PERMISSION);
         }
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setLocationListener();
     }
 
-    private boolean checkPermissions() {
+    private boolean  checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this,ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -327,4 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return true;
     }
+
+
+
 }

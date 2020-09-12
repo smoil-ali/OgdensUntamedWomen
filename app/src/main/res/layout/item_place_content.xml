@@ -16,29 +16,55 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/cardbackground"
-            android:padding="16dp"
 
             >
-            <TextView
-                android:id="@+id/titleContent"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/resourceContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
+                >
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_170sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginBottom="16dp"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    />
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/video"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_170sdp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/titleContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/resourceContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="title"
                 android:textStyle="bold"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 />
+
             <TextView
                 android:id="@+id/descriptionContent"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/titleContent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:text="description"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
+                android:text="description"
+                app:layout_constraintStart_toStartOf="parent"
 
-                />
+                app:layout_constraintTop_toBottomOf="@id/titleContent" />
 
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/audiofile"
@@ -48,6 +74,7 @@
                 app:layout_constraintStart_toEndOf="@+id/control"
                 app:layout_constraintBottom_toBottomOf="@id/control"
                 android:layout_marginTop="16dp"
+
                 />
 
             <TextView
@@ -74,6 +101,8 @@
                     android:src="@drawable/playaudio"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
                     />
                 <ImageButton
                     android:id="@+id/pause"
@@ -84,6 +113,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:visibility="gone"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

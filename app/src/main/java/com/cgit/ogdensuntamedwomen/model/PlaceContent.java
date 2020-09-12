@@ -3,6 +3,7 @@ package com.cgit.ogdensuntamedwomen.model;
 public class PlaceContent {
     private String location;
     private String title;
+    private String type;
     private String description;
     private String audio;
     private boolean isPlay;
@@ -19,18 +20,28 @@ public class PlaceContent {
     public PlaceContent() {
     }
 
-    public PlaceContent(String location, String title, String description) {
+    public PlaceContent(String location, String title,String type, String description) {
         this.location = location;
         this.title = title;
         this.description = description;
+        this.type=type;
 
     }
 
-    public PlaceContent(String location, String title, String description, String audio) {
+    public PlaceContent(String location, String title,String type, String description, String audio) {
         this.location = location;
         this.title = title;
         this.description = description;
         this.audio = audio;
+        this.type=type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isPlay() {

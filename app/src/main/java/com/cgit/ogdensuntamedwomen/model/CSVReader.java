@@ -78,11 +78,11 @@ public class CSVReader {
                     if(resultList.size()>0){
 
                             String[] row = a.get_araay();
-                            resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]));
+                            resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6]));
 
                     }else{
                         String[] row = a.get_araay();
-                        resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]));//header row
+                        resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6]));//header row
                     }
                 }
             }
@@ -136,7 +136,7 @@ public class CSVReader {
                         String[] row = a.get_araay();
                         if (id.equals(row[0])){
                             Log.i("check run","running");
-                                resultList.add(new PlaceContent(row[0],row[1],row[2],row[3]));
+                                resultList.add(new PlaceContent(row[0],row[1],row[2],row[3],row[4]));
                             }
                     }
 

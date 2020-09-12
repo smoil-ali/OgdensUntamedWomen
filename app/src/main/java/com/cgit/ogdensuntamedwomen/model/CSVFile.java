@@ -33,7 +33,7 @@ public class CSVFile {
 
                 String[] row = csvLine.split("\\|");
 
-                resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]));
+                resultList.add(new Places(row[0],row[1],row[2],row[3],row[4],row[5],row[6]));
             }
         }
         catch (IOException ex) {
@@ -61,9 +61,9 @@ public class CSVFile {
                 resultList.clear();
                 if (id.equals(row[0])){
                     if (row.length==4){
-                        resultList.add(new PlaceContent(row[0],row[1],row[2],row[3]));
+                        resultList.add(new PlaceContent(row[0],row[1],row[2],row[3],row[4]));
                     }else {
-                        resultList.add(new PlaceContent(row[0],row[1],row[2]));
+                        resultList.add(new PlaceContent(row[0],row[1],row[2],row[3]));
                     }
 
                 }

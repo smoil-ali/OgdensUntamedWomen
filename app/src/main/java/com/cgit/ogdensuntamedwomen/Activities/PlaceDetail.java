@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cgit.ogdensuntamedwomen.CgitListener;
+import com.cgit.ogdensuntamedwomen.Listener.addCallbackListener;
 import com.cgit.ogdensuntamedwomen.R;
 import com.cgit.ogdensuntamedwomen.adapters.PlaceContentAdapter;
 import com.cgit.ogdensuntamedwomen.adapters.PlacesAdapter;
@@ -37,7 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class PlaceDetail extends AppCompatActivity implements CgitListener {
+public class PlaceDetail extends AppCompatActivity implements CgitListener , addCallbackListener {
 
     private static final String TAG = PlaceDetail.class.getSimpleName();
     ImageView placeImage;
@@ -51,7 +52,6 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
     womenViewModel viewModel;
     public static int listPos =-1;
     public static int seekBarPosition=-1;
-    YouTubePlayerView video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         setContentView(R.layout.activity_place_detail);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         init();
 
         if (savedInstanceState != null){
@@ -80,6 +81,7 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
                 arrayList.addAll(placeContents);
                 Log.i("size list",String.valueOf(arrayList.size()));
                 adapter.notifyDataSetChanged();
+                adapter.setListener(PlaceDetail.this::addLifeCycleCallBack);
                 adapter.setCgitListener(PlaceDetail.this);
             }
         });
@@ -91,7 +93,6 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         placeImage=findViewById(R.id.placeImage);
         title=findViewById(R.id.placeTitle);
         description=findViewById(R.id.description);
-        video=findViewById(R.id.video);
         recyclerView=findViewById(R.id.mRecyclerView);
         recyclerView.setNestedScrollingEnabled(false);
         places= (Places) getIntent().getExtras().getSerializable("placedetail");
@@ -101,20 +102,10 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         placeImage.setImageResource(id);
         title.setText(places.getTitle());
         description.setText(places.getDescription());
-        setVedioPlayer();
         mediaPlayer=new MediaPlayer();
 
     }
 
-    private void setVedioPlayer(){
-        getLifecycle().addObserver(video);
-        video.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(places.getVideoId(),0);
-            }
-        });
-    }
 
     //Get list of strings from CSV ready to use
 
@@ -123,6 +114,8 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter=new PlaceContentAdapter(this,arrayList);
         recyclerView.setAdapter(adapter);
+
+        adapter.setListener(this);
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -192,4 +185,8 @@ public class PlaceDetail extends AppCompatActivity implements CgitListener {
 
     }
 
+    @Override
+    public void addLifeCycleCallBack(YouTubePlayerView youTubePlayerView) {
+        getLifecycle().addObserver(youTubePlayerView);
+    }
 }
